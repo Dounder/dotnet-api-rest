@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Infrastructure.Context;
 
-namespace API.UnitOfWorks;
+namespace API.UnitOfWork;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {

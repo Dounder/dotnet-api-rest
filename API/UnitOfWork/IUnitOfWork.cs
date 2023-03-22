@@ -1,4 +1,4 @@
-﻿namespace API.UnitOfWorks;
+﻿namespace API.UnitOfWork;
 
 public interface IUnitOfWork
 {

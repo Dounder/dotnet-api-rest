@@ -5,7 +5,7 @@ using Core.Interfaces.Common;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Services;
+namespace Infrastructure.Services.Common;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class, IBaseEntity
 {
@@ -50,7 +50,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, IBase
     /// </summary>
     /// <param name="id">Id of the entity</param>
     /// <returns>An unmapped entity</returns>
-    public virtual async Task<T?> FindOne(Guid id)
+    public virtual async Task<T> FindOne(Guid id)
     {
         return await dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.DeletedAt == null && x.Id == id);
     }
@@ -61,7 +61,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, IBase
     /// <param name="id">Id of the entity</param>
     /// <typeparam name="TM">Dto to map</typeparam>
     /// <returns>A mapped entity</returns>
-    public virtual async Task<TM?> FindOne<TM>(Guid id)
+    public virtual async Task<TM> FindOne<TM>(Guid id)
     {
         return await dbSet.AsNoTracking().Where(x => x.DeletedAt == null && x.Id == id)
             .ProjectTo<TM>(mapper.ConfigurationProvider)
@@ -74,7 +74,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, IBase
     /// <param name="predicate">Predicate to search</param>
     /// <typeparam name="TM">Dto to map</typeparam>
     /// <returns>A mapped entity</returns>
-    public virtual async Task<TM?> FindOne<TM>(Expression<Func<T, bool>> predicate)
+    public virtual async Task<TM> FindOne<TM>(Expression<Func<T, bool>> predicate)
     {
         return await dbSet.AsNoTracking().Where(predicate)
             .ProjectTo<TM>(mapper.ConfigurationProvider)
