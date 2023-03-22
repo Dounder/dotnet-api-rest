@@ -3,7 +3,7 @@
 public interface IBaseEntity
 {
     public Guid Id { get; set; }
-    public int IID { get; set; }
+    public int Iid { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
