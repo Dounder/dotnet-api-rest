@@ -20,7 +20,8 @@ public class AuthController : ControllerBase
     private readonly SignInManager<IdentityUser> signInManager;
     private readonly IMapper mapper;
 
-    public AuthController(UserManager<IdentityUser> userManager, IConfiguration configuration, SignInManager<IdentityUser> signInManager,
+    public AuthController(UserManager<IdentityUser> userManager, IConfiguration configuration,
+        SignInManager<IdentityUser> signInManager,
         IMapper mapper)
     {
         this.userManager = userManager;
@@ -45,12 +46,14 @@ public class AuthController : ControllerBase
     {
         var user = await userManager.FindByEmailAsync(loginDto.Email);
 
-        if (user is null) return new BadRequestObjectResult(new { code = 400, msg = "Login error ( email / password )" });
+        if (user is null)
+            return new BadRequestObjectResult(new { code = 400, msg = "Login error ( email / password )" });
 
         var result = await signInManager.PasswordSignInAsync(user.UserName!, loginDto.Password, isPersistent: false,
             lockoutOnFailure: false);
 
-        if (!result.Succeeded) return new BadRequestObjectResult(new { code = 400, msg = "Login error ( email / password )" });
+        if (!result.Succeeded)
+            return new BadRequestObjectResult(new { code = 400, msg = "Login error ( email / password )" });
 
         return Ok(CreateJwt(mapper.Map<AppUser>(user)));
     }
@@ -80,9 +83,7 @@ public class AuthController : ControllerBase
 
         return new AuthDto()
         {
-            Id = user.Id,
-            Email = user.Email,
-            Username = user.UserName,
+            User = mapper.Map<UserDto>(user),
             Token = new JwtSecurityTokenHandler().WriteToken(securityToken),
             Expiration = expiration
         };

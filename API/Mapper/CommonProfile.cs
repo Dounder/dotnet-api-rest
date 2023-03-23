@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using API.DTO.Common;
+using AutoMapper;
 using Core.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 
@@ -9,6 +10,8 @@ public class CommonProfile : Profile
     public CommonProfile()
     {
         CreateMap<IdentityUser, AppUser>();
+        CreateMap<AppUser, IdentityUser>();
+        CreateMap<AppUser, UserDto>();
         
         CreateMap<int?, int>().ConvertUsing((src, dest) => src ?? dest);
         CreateMap<decimal?, decimal>().ConvertUsing((src, dest) => src ?? dest);

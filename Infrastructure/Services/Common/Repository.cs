@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.Common;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : class, IBaseEntity
+public class Repository<T> : IRepository<T> where T : class, IBaseEntity
 {
     private readonly AppDbContext context;
     private readonly IMapper mapper;
     private readonly DbSet<T> dbSet;
 
-    protected GenericRepository(AppDbContext context, IMapper mapper)
+    public Repository(AppDbContext context, IMapper mapper)
     {
         this.context = context;
         this.mapper = mapper;

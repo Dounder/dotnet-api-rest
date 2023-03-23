@@ -6,9 +6,7 @@ public class AuthDto
 {
     public string Token { get; set; }
     public DateTime Expiration { get; set; }
-    public string Email { get; set; }
-    public string Username { get; set; }
-    public string Id { get; set; }
+    public UserDto User { get; set; }
 }
 
 public class LoginDto

@@ -10,7 +10,10 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public UnitOfWork(AppDbContext context, IMapper mapper)
     {
         this.context = context;
+        DbContext = context;
     }
+
+    public AppDbContext DbContext { get; }
 
     public void Dispose() => context.Dispose();
 

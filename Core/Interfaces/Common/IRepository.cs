@@ -2,7 +2,7 @@
 
 namespace Core.Interfaces.Common;
 
-public interface IGenericRepository<T> where T : class, IBaseEntity
+public interface IRepository<T> where T : class, IBaseEntity
 {
     Task<IEnumerable<TM>> Find<TM>();
     Task<IEnumerable<TM>> Find<TM>(Expression<Func<T, bool>> predicate);

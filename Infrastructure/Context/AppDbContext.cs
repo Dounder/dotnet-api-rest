@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
+using Core.Interfaces.Common;
 using Infrastructure.Seed;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -24,6 +26,14 @@ public class AppDbContext : IdentityDbContext
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        foreach (var entity in builder.Model.GetEntityTypes()
+                     .Where(e => typeof(IBaseEntity).IsAssignableFrom(e.ClrType)))
+        {
+            builder.Entity(entity.Name).Property(nameof(IBaseEntity.Iid))
+                .ValueGeneratedOnAdd().Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
+        }
+
         SeedManager.Seed(builder);
     }
 
