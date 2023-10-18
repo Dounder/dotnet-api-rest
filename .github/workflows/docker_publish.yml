@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_IMAGE_NAME: drglasdou/dotnet-rest  # Define the Docker image name as an environment variable
+      DOCKER_IMAGE_NAME: dotnet-rest  # Define the Docker image name as an environment variable
       VERSION_FILE: version.txt
 
     steps:
@@ -26,7 +26,10 @@ jobs:
       run: echo "::set-output name=version::$(expr ${{ steps.read_version.outputs.version }} + 1)" > $VERSION_FILE
 
     - name: Login to Docker Hub
-      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build Docker image with version
       run: docker build -t $DOCKER_IMAGE_NAME:${{ steps.increment_version.outputs.version }} .
@@ -34,7 +37,11 @@ jobs:
     - name: Tag the Docker image as 'latest'
       run: docker tag $DOCKER_IMAGE_NAME:${{ steps.increment_version.outputs.version }} $DOCKER_IMAGE_NAME:latest
 
-    - name: Push Docker images
-      run: |
-        docker push $DOCKER_IMAGE_NAME:${{ steps.increment_version.outputs.version }}
-        docker push $DOCKER_IMAGE_NAME:latest
+    - name: Build and Push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.increment_version.outputs.version }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
