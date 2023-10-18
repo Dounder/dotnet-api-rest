@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_IMAGE_NAME: dotnet-rest  # Define the Docker image name as an environment variable
       VERSION_FILE: version.txt
 
     steps:
@@ -37,5 +36,6 @@ jobs:
         context: .
         push: true
         tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.increment_version.outputs.version }}
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/dotnet-rest:${{ steps.increment_version.outputs.version }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/dotnet-rest:latest
+
