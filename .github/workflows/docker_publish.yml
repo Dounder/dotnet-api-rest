@@ -13,6 +13,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set up Caching
+      uses: actions/cache@v2
+      with:
+        path: |
+          ./version.txt
+        key: ${{ runner.os }}-${{ hashFiles('**/version.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-
+
     - name: Read the current version
       id: read_version
       run: echo "::set-output name=version::$(cat ./version.txt)"
