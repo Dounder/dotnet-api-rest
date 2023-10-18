@@ -30,13 +30,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Build Docker image with version
-      run: docker build -t $DOCKER_IMAGE_NAME:${{ steps.increment_version.outputs.version }} .
-
-    - name: Tag the Docker image as 'latest'
-      run: docker tag $DOCKER_IMAGE_NAME:${{ steps.increment_version.outputs.version }} $DOCKER_IMAGE_NAME:latest
-
+        
     - name: Build and Push Docker image
       uses: docker/build-push-action@v2
       with:
