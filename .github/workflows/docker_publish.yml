@@ -1,0 +1,40 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_IMAGE_NAME: drglasdou/dotnet-rest  # Define the Docker image name as an environment variable
+      VERSION_FILE: version.txt
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Read the current version
+      id: read_version
+      run: echo "::set-output name=version::$(cat $VERSION_FILE)"
+
+    - name: Increment the version
+      id: increment_version
+      run: echo "::set-output name=version::$(expr ${{ steps.read_version.outputs.version }} + 1)" > $VERSION_FILE
+
+    - name: Login to Docker Hub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Docker image with version
+      run: docker build -t $DOCKER_IMAGE_NAME:${{ steps.increment_version.outputs.version }} .
+
+    - name: Tag the Docker image as 'latest'
+      run: docker tag $DOCKER_IMAGE_NAME:${{ steps.increment_version.outputs.version }} $DOCKER_IMAGE_NAME:latest
+
+    - name: Push Docker images
+      run: |
+        docker push $DOCKER_IMAGE_NAME:${{ steps.increment_version.outputs.version }}
+        docker push $DOCKER_IMAGE_NAME:latest
