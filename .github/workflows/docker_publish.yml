@@ -15,7 +15,7 @@ jobs:
 
     - name: Read the current version
       id: read_version
-      run: echo "::set-output name=version::$(cat ./version.txt)"
+      run: echo "::set-output name=version::$(cat ./version.md)"
       
     - name: Increment the version
       id: increment_version
@@ -31,7 +31,7 @@ jobs:
         # Your GitHub token for authentication.
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         # File path to update
-        path: version.txt
+        path: version.md
         # Content to update the file
         content: "${{ env.VERSION }}"
         # Commit message when update the file
