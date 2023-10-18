@@ -16,10 +16,14 @@ jobs:
     - name: Read the current version
       id: read_version
       run: echo "::set-output name=version::$(cat ./version.txt)"
-
+      
     - name: Increment the version
       id: increment_version
-      run: echo "::set-output name=version::$(expr ${{ steps.read_version.outputs.version }} + 1)" > ./version.txt
+      run: |
+        # Increment the version and save it to the environment
+        NEW_VERSION=$(( ${{ steps.read_version.outputs.version }} + 1 ))
+        echo "::set-output name=version::$NEW_VERSION" 
+        echo "Version after increment: $NEW_VERSION" # For debugging purposes
 
     - name: Set environment variable for the version
       run: |
