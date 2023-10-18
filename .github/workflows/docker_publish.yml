@@ -36,7 +36,20 @@ jobs:
       id: version
       uses: PaulHatch/semantic-version@v5.3.0
       with:
-        bump: ${{ env.BUMP }}
+        tag_prefix: "v"
+        # A string which, if present in a git commit, indicates that a change represents a
+        # major (breaking) change, supports regular expressions wrapped with '/'
+        major_pattern: "change:"
+        # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
+        minor_pattern: "feat:"
+        # A string to determine the format of the version output
+        version_format: "${major}.${minor}.${patch}"
+        # Named version, will be used as suffix for name version tag
+        namespace: ${{ env.DOCKER_IMAGE_NAME }}
+        # If true, the body of commits will also be searched for major/minor patterns to determine the version type.
+        search_commit_body: true
+        # The output method used to generate list of users, 'csv' or 'json'.
+        user_format_type: "csv"
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3.0.0
