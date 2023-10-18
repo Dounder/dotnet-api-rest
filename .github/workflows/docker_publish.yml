@@ -14,17 +14,6 @@ jobs:
     - name: Set environment variable for the version
       run: |
         echo "DOCKER_IMAGE_NAME=dotnet-rest" >> $GITHUB_ENV
-        echo "BUMP=false" >> $GITHUB_ENV
-
-    - name: Determine the bump level
-      id: bump-level
-      run: |
-        commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
-        if [[ "$commit_message" =~ [Cc]hange:|[Ff]eat:|[Ff]ix: ]]; then
-          echo "BUMP=true" >> $GITHUB_ENV
-        fi
-        
-      if: env.BUMP == true
       
     - name: Determine the new version
       id: version
@@ -45,15 +34,20 @@ jobs:
         # The output method used to generate list of users, 'csv' or 'json'.
         user_format_type: "csv"
 
-    - name: Create Git tag and release on major version bump
+    - name: Set Git user identity
+      run: |
+        git config --global user.email "${{env.EMAIL}}"
+        git config --global user.name "${{env.USERNAME}}"
+
+    - name: Create Git tag
       run: |
         if [[ "${{ steps.version.outputs.major }}" -gt 0 ]]; then
           git tag -a ${{ steps.version.outputs.version }} -m "Tagging version ${{ steps.version.outputs.version }}"
           git push --follow-tags
-
-          # Create a GitHub release
-          gh release create ${{ steps.version.outputs.version }} ./your-assets-directory
         fi
+
+    - name: Create GitHub Release
+      uses: ncipollo/release-action@v1.13.0
       env:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
