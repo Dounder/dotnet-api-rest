@@ -15,7 +15,10 @@ jobs:
 
     - name: Read the current version
       id: read_version
-      run: echo "::set-output name=version::$(cat ./version.md)"
+      run: |
+        # Extract the version number from version.md
+        VERSION=$(awk '/<!-- \[START AUTO UPDATE\] -->/{flag=1; next} /<!-- \[END AUTO UPDATE\] -->/{flag=0} flag' version.md)
+        echo "::set-output name=version::$VERSION"
       
     - name: Increment the version
       id: increment_version
