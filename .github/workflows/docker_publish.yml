@@ -1,5 +1,3 @@
-name: Docker Build and Push
-
 on:
   push:
     branches:
@@ -21,7 +19,7 @@ jobs:
       id: bump-level
       run: |
         commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
-        if [[ $commit_message == *"change:"* ]]; then
+        if [[ $commit_message == *"change"* ]]; then
           echo "::set-output name=bump::major"
         elif [[ $commit_message == *"feat:"* ]]; then
           echo "::set-output name=bump::minor"
@@ -52,4 +50,3 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.version.outputs.version }}
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
-          
