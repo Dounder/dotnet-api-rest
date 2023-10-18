@@ -14,28 +14,29 @@ jobs:
     - name: Set environment variable for the version
       run: |
         echo "DOCKER_IMAGE_NAME=dotnet-rest" >> $GITHUB_ENV
+        echo "BUMP=none" >> $GITHUB_ENV
 
     - name: Determine the bump level
       id: bump-level
       run: |
         commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
         if [[ $commit_message == *"change:"* ]]; then
-          echo "::set-output name=bump::major"
+          echo "BUMP=major" >> $GITHUB_ENV
         elif [[ $commit_message == *"feat:"* ]]; then
-          echo "::set-output name=bump::minor"
+          echo "BUMP=minor" >> $GITHUB_ENV
         elif [[ $commit_message == *"fix:"* ]]; then
-          echo "::set-output name=bump::patch"
+          echo "BUMP=patch" >> $GITHUB_ENV
         else
-          echo "::set-output name=bump::none"
+          echo "BUMP=none" >> $GITHUB_ENV
         fi
         
-      if: steps.bump-level.outputs.bump != 'none'
+      if: ${{ env.BUMP }} != 'none'
       
     - name: Determine the new version
       id: version
       uses: PaulHatch/semantic-version@v5.3.0
       with:
-        bump: ${{ steps.bump-level.outputs.bump }}
+        bump: ${{ env.BUMP }}
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3.0.0
