@@ -36,7 +36,12 @@ jobs:
         content: "${{ env.VERSION }}"
         # Commit message when update the file
         commit_message: "update: version.txt with new version"
-        
+        # Opening comment
+        opening_comment: "<!-- [START AUTO UPDATE] -->"
+        # Closing comment
+        closing_comment: "<!-- [END AUTO UPDATE] -->"
+        # Warning comment
+        warning_comment: "<!-- Please keep comment here to allow auto-update -->"
 
     - name: Set environment variable for the version
       run: |
