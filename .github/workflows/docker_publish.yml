@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      VERSION_FILE: version.txt
+      VERSION_FILE: ./version.txt
 
     steps:
     - name: Checkout code
