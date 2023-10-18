@@ -19,7 +19,7 @@ jobs:
       id: bump-level
       run: |
         commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
-        if [[ $commit_message == *"change"* ]]; then
+        if [[ $commit_message == *"change:"* ]]; then
           echo "::set-output name=bump::major"
         elif [[ $commit_message == *"feat:"* ]]; then
           echo "::set-output name=bump::minor"
@@ -32,6 +32,7 @@ jobs:
       if: steps.bump-level.outputs.bump != 'none'
       
     - name: Determine the new version
+      id: version
       uses: PaulHatch/semantic-version@v5.3.0
       with:
         bump: ${{ steps.bump-level.outputs.bump }}
