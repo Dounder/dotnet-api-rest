@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      DOCKER_IMAGE_NAME: drglasdou/dotnet  # Define the Docker image name as an environment variable
+      DOCKER_IMAGE_NAME: dotnet-rest  # Define the Docker image name as an environment variable
       VERSION_FILE: ./version.txt
 
     steps:
