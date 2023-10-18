@@ -22,8 +22,8 @@ jobs:
       run: |
         # Increment the version and save it to the environment
         NEW_VERSION=$(( ${{ steps.read_version.outputs.version }} + 1 ))
-        echo "::set-output name=version::$NEW_VERSION" 
         echo "Version after increment: $NEW_VERSION" # For debugging purposes
+        echo "$NEW_VERSION" > ./version.txt  # Overwrite version.txt with the new version
 
     - name: Set environment variable for the version
       run: |
