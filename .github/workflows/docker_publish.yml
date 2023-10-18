@@ -16,21 +16,27 @@ jobs:
     - name: Set environment variable for the version
       run: |
         echo "DOCKER_IMAGE_NAME=dotnet-rest" >> $GITHUB_ENV
+
+    - name: Determine the bump level
+      id: bump-level
+      run: |
+        commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
+        if [[ $commit_message == *"change:"* ]]; then
+          echo "::set-output name=bump::major"
+        elif [[ $commit_message == *"feat:"* ]]; then
+          echo "::set-output name=bump::minor"
+        elif [[ $commit_message == *"fix:"* ]]; then
+          echo "::set-output name=bump::patch"
+        else
+          echo "::set-output name=bump::none"
+        fi
+        
+      if: steps.bump-level.outputs.bump != 'none'
       
     - name: Determine the new version
-      id: version
       uses: PaulHatch/semantic-version@v5.3.0
       with:
-        tag_prefix: "v"
-        # A string which, if present in a git commit, indicates that a change represents a
-        # major (breaking) change, supports regular expressions wrapped with '/'
-        major_pattern: "(MAJOR)"
-        # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
-        minor_pattern: "(MINOR)"
-        # A string to determine the format of the version output
-        version_format: "${major}.${minor}.${patch}-prerelease${increment}"
-        # Named version, will be used as suffix for name version tag
-        namespace: env.DOCKER_IMAGE_NAME
+        bump: ${{ steps.bump-level.outputs.bump }}
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3.0.0
