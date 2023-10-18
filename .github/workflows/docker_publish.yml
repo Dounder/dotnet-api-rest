@@ -24,9 +24,19 @@ jobs:
         CURRENT_VERSION=${{ steps.read_version.outputs.version }}
         NEW_VERSION=$((CURRENT_VERSION + 1))
         echo "::set-output name=version::$NEW_VERSION"
+
+    - name: Update the version.txt with the new version
+      uses: wow-actions/update-file@v1.2.0
+      with:
+        # Your GitHub token for authentication.
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        # File path to update
+        path: ./version.txt
+        # Content to update the file
+        content: "${{ env.VERSION }}"
+        # Commit message when update the file
+        commit_message: "update: version.txt with new version"
         
-        # Update version.txt
-        echo $NEW_VERSION > ./version.txt
 
     - name: Set environment variable for the version
       run: |
