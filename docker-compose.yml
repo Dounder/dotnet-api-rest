@@ -3,7 +3,7 @@
 services: 
   api:
     container_name: template_api
-    image: drglasdou/dotnet:api_rest
+    image: drglasdou/dotnet-rest
     build: 
       context: .
       dockerfile: Dockerfile
