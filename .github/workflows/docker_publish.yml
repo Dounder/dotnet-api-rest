@@ -28,13 +28,22 @@ jobs:
         NEW_VERSION=$((CURRENT_VERSION + 1))
         echo "::set-output name=version::$NEW_VERSION"
         
-        # Update version.md with the new version
-        sed -i '/<!-- \[START AUTO UPDATE\]/,/<!-- \[END AUTO UPDATE\]/s/[0-9]\+/$NEW_VERSION/' version.md
-        
     - name: Set environment variable for the version
       run: |
         echo "VERSION=${{ steps.increment_version.outputs.version }}" >> $GITHUB_ENV
         echo "DOCKER_IMAGE_NAME=dotnet-rest" >> $GITHUB_ENV
+      
+    - name: Update the version.txt with the new version
+      uses: wow-actions/update-file@v1.2.0
+      with:
+        # Your GitHub token for authentication.
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        # File path to update
+        path: version.md
+        # Content to update the file
+        content: "${{ env.VERSION }}"
+        # Commit message when update the file
+        commit_message: "update: version.txt with new version"
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
