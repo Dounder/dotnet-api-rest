@@ -34,26 +34,6 @@ jobs:
         # The output method used to generate list of users, 'csv' or 'json'.
         user_format_type: "csv"
 
-    - name: Set Git user identity
-      run: |
-        git config --global user.email "${{vars.EMAIL}}"
-        git config --global user.name "${{vars.USERNAME}}"
-
-    - name: Debug Info
-      run: |
-        echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
-        echo "vars.EMAIL: ${{ vars.EMAIL }}"
-        echo "vars.USERNAME: ${{ vars.USERNAME }}"
-        git config --global --get user.email
-        git config --global --get user.name
-
-    - name: Create Git tag
-      run: |
-        if [[ "${{ steps.version.outputs.major }}" -gt 0 ]]; then
-          git tag -a ${{ steps.version.outputs.version }} -m "Tagging version ${{ steps.version.outputs.version }}"
-          git push --follow-tags
-        fi
-
     - name: Create GitHub Release
       uses: ncipollo/release-action@v1.13.0
       env:
