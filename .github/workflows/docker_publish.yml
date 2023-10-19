@@ -37,8 +37,10 @@ jobs:
     - name: Debug Info
       run: |
         echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
-        echo "vars.EMAIL: ${{ secrets.EMAIL }}"
-        echo "vars.USERNAME: ${{ secrets.USERNAME }}"
+        echo "vars.EMAIL: ${{ vars.EMAIL }}"
+        echo "vars.USERNAME: ${{ vars.USERNAME }}"
+        echo "vars.EMAIL: ${{ env.EMAIL }}"
+        echo "vars.USERNAME: ${{ env.USERNAME }}"
         git config --global --get user.email
         git config --global --get user.name
 
