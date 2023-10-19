@@ -42,13 +42,7 @@ jobs:
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.version.outputs.version }}
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
           
-    - name: Create tag
-      uses: actions/github-script@v5
-      with:
-        script: |
-          github.rest.git.createRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: 'refs/tags/${{ steps.version.outputs.version }}',
-            sha: context.sha
-          })
+    - name: Tag and push current repo code
+      run: |
+        git tag -a ${{ steps.version.outputs.version }} -m "Api ${{ steps.version.outputs.version }}"
+        git push origin ${{ steps.version.outputs.version }}
