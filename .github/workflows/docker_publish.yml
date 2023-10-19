@@ -46,7 +46,7 @@ jobs:
       run: |
         git config user.email "${{vars.EMAIL}}"
         git config user.name "${{vars.USERNAME}}_bot"
-        git tag -a v${{ steps.version.outputs.version }} -m "Tag for api version v${{ steps.version.outputs.version }}"
+        git tag -a v${{ steps.version.outputs.version }} -m "Change: new version v${{ steps.version.outputs.version }}"
         git push origin v${{ steps.version.outputs.version }} --tags
       env:
         GH_PAT: ${{ secrets.ACCESS_TOKEN }}
