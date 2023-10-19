@@ -36,8 +36,8 @@ jobs:
 
     - name: Set Git user identity
       run: |
-        git config --global user.email "${{env.EMAIL}}"
-        git config --global user.name "${{env.USERNAME}}"
+        git config --global user.email "${{vars.EMAIL}}"
+        git config --global user.name "${{vars.USERNAME}}"
 
     - name: Create Git tag
       run: |
