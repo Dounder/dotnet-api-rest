@@ -34,6 +34,14 @@ jobs:
         # The output method used to generate list of users, 'csv' or 'json'.
         user_format_type: "csv"
 
+    - name: Debug Info
+      run: |
+        echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+        echo "vars.EMAIL: ${{ secrets.EMAIL }}"
+        echo "vars.USERNAME: ${{ secrets.USERNAME }}"
+        git config --global --get user.email
+        git config --global --get user.name
+
     - name: Set Git user identity
       run: |
         git config --global user.email "${{vars.EMAIL}}"
