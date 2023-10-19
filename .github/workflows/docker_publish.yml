@@ -42,18 +42,18 @@ jobs:
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.version.outputs.version }}
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
           
-    - name: Set bump_version_scheme
-      run: |
-        if [ "${{ steps.version.outputs.major }}" -gt 0 ]; then
-          echo "BUMP=major" >> $GITHUB_ENV
-        elif [ "${{ steps.version.outputs.minor }}" -gt 0 ]; then
-          echo "BUMP=minor" >> $GITHUB_ENV
-        else
-          echo "BUMP=patch" >> $GITHUB_ENV
-        fi
+    # - name: Set bump_version_scheme
+    #   run: |
+    #     if [ "${{ steps.version.outputs.major }}" -gt 0 ]; then
+    #       echo "BUMP=major" >> $GITHUB_ENV
+    #     elif [ "${{ steps.version.outputs.minor }}" -gt 0 ]; then
+    #       echo "BUMP=minor" >> $GITHUB_ENV
+    #     else
+    #       echo "BUMP=patch" >> $GITHUB_ENV
+    #     fi
     
-    - name: Tag/Release on Push Action
-      uses: rymndhng/release-on-push-action@v0.27.0
-      with:
-        bump_version_scheme: "${{ env.BUMP }}"
-        release_name: "Release ${{ steps.version.outputs.version }}"
+    # - name: Tag/Release on Push Action
+    #   uses: rymndhng/release-on-push-action@v0.27.0
+    #   with:
+    #     bump_version_scheme: "${{ env.BUMP }}"
+    #     release_name: "Release ${{ steps.version.outputs.version }}"
