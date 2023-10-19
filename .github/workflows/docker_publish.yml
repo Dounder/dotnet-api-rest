@@ -44,5 +44,7 @@ jobs:
           
     - name: Tag and push current repo code
       run: |
+        git config --global user.email "${{vars.EMAIL}}"
+        git config --global user.name "${{vars.USERNAME}}"
         git tag -a ${{ steps.version.outputs.version }} -m "Api ${{ steps.version.outputs.version }}"
         git push origin ${{ steps.version.outputs.version }}
